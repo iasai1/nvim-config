@@ -1,0 +1,10 @@
+local dap = require("dap")
+local dapui = require("dapui")
+
+vim.keymap.set("n", "<leader>ds", function ()
+    dap.setup()   
+    dapui.setup() 
+end)
+vim.keymap.set("n", "<leader>do", function ()
+       dapui.open() 
+end)
