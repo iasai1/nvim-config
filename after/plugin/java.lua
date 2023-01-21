@@ -1,3 +1,5 @@
+vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>")      
+
 local jdtls = require('jdtls')
 
 local jdt_path = '/home/iasai1/.jdt/jdt-language-server-1.9.0-202203031534/'
@@ -115,10 +117,7 @@ config.on_attach = function(client, bufnr)
     vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>")
     vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
     vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-    vim.keymap.set("n", "gr", function ()
-        vim.cmd('lua vim.lsp.buf.references()')
-        vim.cmd('copen')
-    end)
+    vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
     vim.keymap.set("n", "<leader>e", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>")
     vim.keymap.set("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>")
     vim.keymap.set("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>")
@@ -134,17 +133,16 @@ config.on_attach = function(client, bufnr)
     vim.keymap.set("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>")
 
 
---    vim.api.nvim_exec([[
---    hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
---    hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
---    hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
---    augroup lsp_document_highlight
---    autocmdo
---    autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
---    autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
---    augroup END
---  ], false)
-      print("SLAM")
+    vim.api.nvim_exec([[
+        hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+        hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+        hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+        augroup lsp_document_highlight
+        autocmdo
+        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+        augroup END
+    ]], false)
 end
 
 config.capabilities = {
@@ -176,45 +174,40 @@ config.init_options = {
     extendedClientCapabilities = extendedClientCapabilities
 }
 
-config.filetypes = {
-    "java"
-}
+local filetypes = { 'java' }
+
+config.filetypes = filetypes
+
+config.autostart = true
 
 config.log_level = "debug"
- -- UI
-    local finders = require'telescope.finders'
-    local sorters = require'telescope.sorters'
-    local actions = require'telescope.actions'
-    local pickers = require'telescope.pickers'
-    require('jdtls.ui').pick_one_async = function(items, prompt, label_fn, cb)
-      local opts = {}
-      pickers.new(opts, {
-        prompt_title = prompt,
-        finder    = finders.new_table {
-          results = items,
-          entry_maker = function(entry)
-            return {
-              value = entry,
-              display = label_fn(entry),
-              ordinal = label_fn(entry),
-            }
-          end,
-        },
-        sorter = sorters.get_generic_fuzzy_sorter(),
-        attach_mappings = function(prompt_bufnr)
-          actions.goto_file_selection_edit:replace(function()
-            local selection = actions.get_selected_entry(prompt_bufnr)
-            actions.close(prompt_bufnr)
 
-            cb(selection.value)
-          end)
-
-          return true
-        end,
-      }):find()
+local autocmd
+config.on_init = function(client, results)
+    local buf_attach = function()
+        vim.lsp.buf_attach_client(0, client.id)
     end
+
+    autocmd = vim.api.nvim_create_autocmd('FileType', {
+        desc = string.format('Attach LSP: %s', client.name),
+        pattern = filetypes,
+        callback = buf_attach
+    })
+
+    if vim.v.vim_did_enter == 1 and
+        vim.tbl_contains(filetypes, vim.bo.filetype)
+        then
+            buf_attach()
+        end
+end
+
+config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
+    vim.api.nvim_del_autocmd(autocmd)
+end)
 
 
 -- This starts a new client & server,
 -- or attaches to an existing client & server depending on the `root_dir`.
 jdtls.start_or_attach(config)
+
+require('jdtls.setup').add_commands();

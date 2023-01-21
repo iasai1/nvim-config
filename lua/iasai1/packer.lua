@@ -22,6 +22,8 @@ return require('packer').startup(function(use)
     use "mbbill/undotree"
     use "tpope/vim-fugitive"
 
+    use {'nvim-telescope/telescope-ui-select.nvim' }
+
     use {
         'VonHeikemen/lsp-zero.nvim',
         requires = {
@@ -63,4 +65,9 @@ return require('packer').startup(function(use)
 
     use { 'mfussenegger/nvim-jdtls' }
 
+    use { "gbrlsnchs/telescope-lsp-handlers.nvim" }
+
+    use { 'nvim-tree/nvim-web-devicons' }
+
+    use { 'nvim-telescope/telescope-fzy-native.nvim' }
 end)
