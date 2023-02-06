@@ -2,11 +2,13 @@ vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>"
 
 local jdtls = require('jdtls')
 
-local jdt_path = '/home/iasai1/.jdt/jdt-language-server-1.9.0-202203031534/'
+local HOME = os.getenv("HOME")
+local jdt_path = HOME .. '/.jdt/jdt-language-server-1.9.0-202203031534/'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
-local workspace_dir = '/home/iasai1/.eclipse/' .. project_name
+local workspace_dir = HOME .. '/.eclipse/' .. project_name
 local sdk_path = '/home/iasai1/.sdkman/candidates/java/'
+local DEBUGGER_LOCATION = HOME .. '/.config/nvim-data/java'
 
 local config = {}
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
@@ -103,9 +105,13 @@ config.settings = {
 
 config.on_attach = function(client, bufnr)
 
-
+    require('jdtls.setup').add_commands()
+    jdtls.setup_dap { hotcodereplace = "auto" }
+    require("jdtls.dap").setup_dap_main_class_configs()
+    vim.lsp.codelens.refresh()
     --buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
+   -- -- Mappings.
     -- Mappings.
     vim.keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>")
     vim.keymap.set("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>")
@@ -118,19 +124,38 @@ config.on_attach = function(client, bufnr)
     vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
     vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
     vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-    vim.keymap.set("n", "<leader>e", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>")
-    vim.keymap.set("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>")
-    vim.keymap.set("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>")
-    vim.keymap.set("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>")
-    -- Java specific
-    vim.keymap.set("n", "<leader>di", "<Cmd>lua require('jdtls').organize_imports()<CR>")
-    vim.keymap.set("n", "<leader>dt", "<Cmd>lua require('jdtls').test_class()<CR>")
-    vim.keymap.set("n", "<leader>dn", "<Cmd>lua require('jdtls').test_nearest_method()<CR>")
-    vim.keymap.set("v", "<leader>de", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>")
-    vim.keymap.set("n", "<leader>de", "<Cmd>lua require('jdtls').extract_variable()<CR>")
-    vim.keymap.set("v", "<leader>dm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>")
+    vim.keymap.set("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>")
+    vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
+    vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 
-    vim.keymap.set("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>")
+    vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>")
+    vim.keymap.set("n", "<C-/>", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+   -- vim.keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>")
+   -- vim.keymap.set("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>")
+   -- vim.keymap.set("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>")
+   -- vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+   -- vim.keymap.set("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+   -- vim.keymap.set("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>")
+   -- vim.keymap.set("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>")
+   -- vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>")
+   -- vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
+   -- vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+   -- vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+   -- vim.keymap.set("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>")
+   -- vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
+   -- vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
+
+   -- vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>")
+   -- vim.keymap.set("n", "<C-/>", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+    -- Java specific
+    vim.keymap.set("n", "<leader>ji", "<Cmd>lua require('jdtls').organize_imports()<CR>")
+    vim.keymap.set("n", "<leader>jt", "<Cmd>lua require('jdtls').test_class()<CR>")
+    vim.keymap.set("n", "<leader>jn", "<Cmd>lua require('jdtls').test_nearest_method()<CR>")
+    vim.keymap.set("v", "<leader>je", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>")
+    vim.keymap.set("n", "<leader>je", "<Cmd>lua require('jdtls').extract_variable()<CR>")
+    vim.keymap.set("v", "<leader>jm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>")
+
+    vim.keymap.set("n", "<leader>jf", "<cmd>lua vim.lsp.buf.formatting()<CR>")
 
 
     vim.api.nvim_exec([[
@@ -161,29 +186,28 @@ config.capabilities = {
 -- Language server `initializationOptions`
 -- You need to extend the `bundles` with paths to jar files
 -- if you want to use additional eclipse.jdt.ls plugins.
---
--- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
---
--- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
-local extendedClientCapabilities = require'jdtls'.extendedClientCapabilities
+local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 extendedClientCapabilities.classFileContentsSupport = true
-
+local bundles = {
+  vim.fn.glob(
+    DEBUGGER_LOCATION .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
+  ),
+}
+vim.list_extend(bundles, vim.split(vim.fn.glob(DEBUGGER_LOCATION .. "/vscode-java-test/server/*.jar"), "\n"))
 config.init_options = {
-    bundles = {},
+    bundles = bundles,
     extendedClientCapabilities = extendedClientCapabilities
 }
 
 local filetypes = { 'java' }
-
 config.filetypes = filetypes
-
 config.autostart = true
-
 config.log_level = "debug"
 
 local autocmd
 config.on_init = function(client, results)
+
     local buf_attach = function()
         vim.lsp.buf_attach_client(0, client.id)
     end
@@ -210,4 +234,3 @@ end)
 -- or attaches to an existing client & server depending on the `root_dir`.
 jdtls.start_or_attach(config)
 
-require('jdtls.setup').add_commands();

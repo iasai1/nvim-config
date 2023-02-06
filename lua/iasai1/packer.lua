@@ -61,8 +61,6 @@ return require('packer').startup(function(use)
         end
     }
 
-    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
-
     use { 'mfussenegger/nvim-jdtls' }
 
     use { "gbrlsnchs/telescope-lsp-handlers.nvim" }
@@ -70,4 +68,21 @@ return require('packer').startup(function(use)
     use { 'nvim-tree/nvim-web-devicons' }
 
     use { 'nvim-telescope/telescope-fzy-native.nvim' }
+
+    use {
+        "mfussenegger/nvim-dap",
+        opt = true,
+        event = "BufReadPre",
+        module = { "dap" },
+        requires = {
+            'ravenxrz/DAPInstall.nvim',
+            "theHamsta/nvim-dap-virtual-text",
+            "rcarriga/nvim-dap-ui",
+            "mfussenegger/nvim-dap-python",
+            "nvim-telescope/telescope-dap.nvim",
+--            { "leoluz/nvim-dap-go", module = "dap-go" },
+            { "jbyuki/one-small-step-for-vimkind", module = "osv" },
+        }
+    }
+
 end)
