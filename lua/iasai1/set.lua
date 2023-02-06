@@ -12,7 +12,7 @@ vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.config/nvim-data/undodir"
+vim.opt.undodir = os.getenv("LOCALAPPDATA") .. "/nvim-data/undodir"
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false

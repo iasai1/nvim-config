@@ -1,7 +1,7 @@
 
 local dap_install = require('dap-install')
 dap_install.setup {
-    installation_path = os.getenv('HOME') .. ".config/nvim-data/dapinstall/",
+    installation_path = os.getenv('LOCALAPPDATA') .. "/nvim-data/dapinstall/",
 }
 
 local dap_breakpoint = {

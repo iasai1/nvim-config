@@ -2,13 +2,13 @@ vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>"
 
 local jdtls = require('jdtls')
 
-local HOME = os.getenv("HOME")
-local jdt_path = HOME .. '/.jdt/jdt-language-server-1.9.0-202203031534/'
+local HOME = os.getenv("LOCALAPPDATA")
+local jdt_path = HOME .. '/jdt'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
-local workspace_dir = HOME .. '/.eclipse/' .. project_name
-local sdk_path = '/home/iasai1/.sdkman/candidates/java/'
-local DEBUGGER_LOCATION = HOME .. '/.config/nvim-data/java'
+local workspace_dir = HOME .. '/eclipse/' .. project_name
+local sdk_path = 'C:\\Program Files\\Eclipse Adoptium'
+local DEBUGGER_LOCATION = HOME .. '/nvim-data/java'
 
 local config = {}
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
@@ -16,7 +16,7 @@ local config = {}
 -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
 config.cmd = {
     -- 💀
-    sdk_path .. '17.0.5-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
+    sdk_path .. '/jdk-17.0.6.10-hotspot/bin/java.exe', -- or '/path/to/java17_or_newer/bin/java'
     -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -37,7 +37,7 @@ config.cmd = {
 
 
     -- 💀
-    '-configuration', jdt_path .. '/config_linux',
+    '-configuration', jdt_path .. '/config_win',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
     -- Must point to the                      Change to one of `linux`, `win` or `mac`
     -- eclipse.jdt.ls installation            Depending on your system.
@@ -96,8 +96,13 @@ config.settings = {
             runtimes = {
                 {
                     name = "JavaSE-17",
-                    path = sdk_path .. '17.0.5-tem/'
+                    path = sdk_path .. 'jdk-17.0.6.10-hotspot/'
                 },
+                {
+                    name = "JavaSE-8",
+                    path = sdk_path .. 'jdk-8.0.362.9-hotspot/'
+                },
+
             }
         };
     }
