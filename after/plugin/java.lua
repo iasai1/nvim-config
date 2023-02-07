@@ -3,20 +3,20 @@ vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>"
 local jdtls = require('jdtls')
 
 local HOME = os.getenv("LOCALAPPDATA")
-local jdt_path = HOME .. '/jdt'
+local jdt_path = HOME .. '\\jdt'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
-local workspace_dir = HOME .. '/eclipse/' .. project_name
+local workspace_dir = HOME .. '\\eclipse\\' .. project_name
 local sdk_path = 'C:\\Program Files\\Eclipse Adoptium'
-local DEBUGGER_LOCATION = HOME .. '/nvim-data/java'
+local DEBUGGER_LOCATION = HOME .. '\\nvim-data\\java'
 
 local config = {}
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 -- The command that starts the language server
--- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
+-- See: https:\\\\github.com\\eclipse\\eclipse.jdt.ls#running-from-the-command-line
 config.cmd = {
     -- 💀
-    sdk_path .. '/jdk-17.0.6.10-hotspot/bin/java.exe', -- or '/path/to/java17_or_newer/bin/java'
+    sdk_path .. '\\jdk-17.0.6.10-hotspot\\bin\\java.exe', -- or '\\path\\to\\java17_or_newer\\bin\\java'
     -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -30,14 +30,14 @@ config.cmd = {
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
 
     -- 💀
-    '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+    '-jar', jdt_path .. '\\plugins\\org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
     -- Must point to the                                                     Change this to
     -- eclipse.jdt.ls installation                                           the actual version
 
 
     -- 💀
-    '-configuration', jdt_path .. '/config_win',
+    '-configuration', jdt_path .. '\\config_win',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
     -- Must point to the                      Change to one of `linux`, `win` or `mac`
     -- eclipse.jdt.ls installation            Depending on your system.
@@ -53,7 +53,7 @@ config.cmd = {
 -- One dedicated LSP server & client will be started per unique root_dir
 
 -- Here you can configure eclipse.jdt.ls specific settings
--- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+-- See https:\\\\github.com\\eclipse\\eclipse.jdt.ls\\wiki\\Running-the-JAVA-LS-server-from-the-command-line#initialize-request
 -- for a list of options
 config.settings = {
     java = {
@@ -96,11 +96,11 @@ config.settings = {
             runtimes = {
                 {
                     name = "JavaSE-17",
-                    path = sdk_path .. 'jdk-17.0.6.10-hotspot/'
+                    path = sdk_path .. '\\jdk-17.0.6.10-hotspot\\'
                 },
                 {
-                    name = "JavaSE-8",
-                    path = sdk_path .. 'jdk-8.0.362.9-hotspot/'
+                    name = "JavaSE-1.8",
+                    path = sdk_path .. '\\jdk-8.0.362.9-hotspot\\'
                 },
 
             }
@@ -196,10 +196,10 @@ extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 extendedClientCapabilities.classFileContentsSupport = true
 local bundles = {
   vim.fn.glob(
-    DEBUGGER_LOCATION .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
+    DEBUGGER_LOCATION .. "\\java-debug\\com.microsoft.java.debug.plugin\\target\\com.microsoft.java.debug.plugin-*.jar"
   ),
 }
-vim.list_extend(bundles, vim.split(vim.fn.glob(DEBUGGER_LOCATION .. "/vscode-java-test/server/*.jar"), "\n"))
+vim.list_extend(bundles, vim.split(vim.fn.glob(DEBUGGER_LOCATION .. "\\vscode-java-test\\server\\*.jar"), "\n"))
 config.init_options = {
     bundles = bundles,
     extendedClientCapabilities = extendedClientCapabilities
@@ -231,6 +231,7 @@ config.on_init = function(client, results)
 end
 
 config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
+    print(autocmd)
     vim.api.nvim_del_autocmd(autocmd)
 end)
 
