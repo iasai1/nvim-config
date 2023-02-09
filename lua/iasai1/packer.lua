@@ -67,7 +67,7 @@ return require('packer').startup(function(use)
 
     use { 'nvim-tree/nvim-web-devicons' }
 
-    use { 'nvim-telescope/telescope-fzy-native.nvim' }
+    use 'nvim-telescope/telescope-fzy-native.nvim'
 
     use {
         "mfussenegger/nvim-dap",

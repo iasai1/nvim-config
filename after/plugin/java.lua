@@ -2,13 +2,13 @@ vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>"
 
 local jdtls = require('jdtls')
 
-local HOME = os.getenv("HOME")
-local jdt_path = HOME .. '/.jdt/jdt-language-server-1.9.0-202203031534/'
+local HOME = os.getenv("HOME") .. '/.config'
+local jdt_path = HOME .. '/jdt/jdt-language-server-1.9.0-202203031534/'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
-local workspace_dir = HOME .. '/.eclipse/' .. project_name
-local sdk_path = '/home/iasai1/.sdkman/candidates/java/'
-local DEBUGGER_LOCATION = HOME .. '/.config/nvim-data/java'
+local workspace_dir = HOME .. '/eclipse/' .. project_name
+local sdk_path = HOME .. '/.sdkman/candidates/java/'
+local DEBUGGER_LOCATION = HOME .. '/nvim-data/java'
 
 local config = {}
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
@@ -233,4 +233,3 @@ end)
 -- This starts a new client & server,
 -- or attaches to an existing client & server depending on the `root_dir`.
 jdtls.start_or_attach(config)
-
