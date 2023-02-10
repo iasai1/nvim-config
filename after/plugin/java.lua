@@ -1,14 +1,14 @@
-vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>")      
+vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>")
 
 local jdtls = require('jdtls')
 
-local HOME = os.getenv("HOME") .. '/.config'
-local jdt_path = HOME .. '/jdt/jdt-language-server-1.9.0-202203031534/'
+local HOME = os.getenv('HOME')
+local jdt_path = HOME .. '/.config/jdt'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
-local workspace_dir = HOME .. '/eclipse/' .. project_name
-local sdk_path = HOME .. '/.sdkman/candidates/java/'
-local DEBUGGER_LOCATION = HOME .. '/nvim-data/java'
+local workspace_dir = HOME .. '/.config/eclipse/' .. project_name
+local sdk_path = HOME .. '/.sdkman/candidates/java'
+local DEBUGGER_LOCATION = HOME .. '/.config/nvim-data/java'
 
 local config = {}
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
@@ -16,7 +16,7 @@ local config = {}
 -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
 config.cmd = {
     -- 💀
-    sdk_path .. '17.0.5-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
+    sdk_path .. '/17.0.5-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
     -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -96,7 +96,11 @@ config.settings = {
             runtimes = {
                 {
                     name = "JavaSE-17",
-                    path = sdk_path .. '17.0.5-tem/'
+                    path = sdk_path .. '/17.0.5-tem/'
+                },
+                {
+                    name = "JavaSE-1.8",
+                    path = sdk_path .. '/8.0.352-tem/'
                 },
             }
         };
@@ -223,11 +227,12 @@ config.on_init = function(client, results)
         then
             buf_attach()
         end
+
+        config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
+            vim.api.nvim_del_autocmd(autocmd)
+        end)
 end
 
-config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
-    vim.api.nvim_del_autocmd(autocmd)
-end)
 
 
 -- This starts a new client & server,
