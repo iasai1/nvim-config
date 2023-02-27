@@ -206,7 +206,7 @@ config.init_options = {
 
 local filetypes = { 'java' }
 config.filetypes = filetypes
-config.autostart = true
+--:config.autostart = true
 config.log_level = "debug"
 
 local autocmd
@@ -233,6 +233,22 @@ config.on_init = function(client, results)
         end)
 end
 
+-- Remote debugger configuration
+require('dap').configurations.java = {
+    {
+        type = "java",
+        request = "attach",
+        name = "Debug (Attach) - Remote",
+        projectName = function()
+            return vim.fn.input("Project Name: ")
+        end,
+--        projectName = "",
+        hostName = "127.0.0.1",
+        port = function()
+            return vim.fn.input("Debug Port: ")
+        end
+    }
+}
 
 
 -- This starts a new client & server,

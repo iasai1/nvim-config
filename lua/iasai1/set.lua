@@ -1,3 +1,5 @@
+vim.env.HOME = os.getenv("HOME")
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 

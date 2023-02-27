@@ -5,7 +5,7 @@ lsp.preset("recommended")
 lsp.ensure_installed({
 --  'tsserver',
 -- 'eslint',
-  'sumneko_lua',
+--  'sumneko_lua',
   'rust_analyzer',
 --  'dockerls'
 })
@@ -43,7 +43,7 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     vim.keymap.set("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>")
     vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>")
     vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
-    vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+    vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.rename()<CR>")
     vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
     vim.keymap.set("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>")
     vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
