@@ -20,7 +20,6 @@ return require('packer').startup(function(use)
     use "theprimeagen/harpoon"
 
     use "mbbill/undotree"
-    use "tpope/vim-fugitive"
 
     use {'nvim-telescope/telescope-ui-select.nvim' }
 
@@ -61,6 +60,9 @@ return require('packer').startup(function(use)
         end
     }
 
+    use { 'drewtempelmeyer/palenight.vim' }
+    use { 'olimorris/onedarkpro.nvim' }
+
     use { 'mfussenegger/nvim-jdtls' }
 
     use { "gbrlsnchs/telescope-lsp-handlers.nvim" }
@@ -85,4 +87,14 @@ return require('packer').startup(function(use)
         }
     }
 
+    use {
+        "folke/zen-mode.nvim",
+        config = function()
+            require('zen-mode').setup {
+            }
+        end
+    }
+
+
 end)
+

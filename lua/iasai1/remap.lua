@@ -35,3 +35,4 @@ vim.keymap.set("t", "<C-q>", "<C-\\><C-N>")
 
 --vim.keymap.set("t", "<C-Q>", [[:bw!<CR>]])
 --vim.keymap.set("n", "<C-Q>", [[:bw<CR>]])
+vim.keymap.set("n", "gb", "<C-o>")

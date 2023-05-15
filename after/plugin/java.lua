@@ -29,6 +29,8 @@ config.cmd = {
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
 
+    --lombok
+    '-javaagent:' .. HOME .. '/.local/share/eclipse/lombok.jar',
     -- 💀
     '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
@@ -247,6 +249,11 @@ require('dap').configurations.java = {
         port = function()
             return vim.fn.input("Debug Port: ")
         end
+    },
+    {
+        type = "java",
+        request = "launch",
+        name = "Debug (Launch)"
     }
 }
 
