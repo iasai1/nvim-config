@@ -14,8 +14,12 @@ vim.keymap.set('n', '<leader>pf', function()
 end)
 
 telescope.setup {
+    layout_strategy = 'vertical',
+      --layout_config = { height = 0.95, width = 0.95 },
+
     defaults = {
-        path_display = "truncate",
+        path_display = {"smart"},
+        warp_results = true,
         preview = {
             hide_on_startup = true
         },
@@ -27,7 +31,7 @@ telescope.setup {
     },
     extensions = {
         ["ui-select"] = {
-            require("telescope.themes").get_dropdown {
+            require("telescope.themes").get_cursor {
                 -- even more opts
             }
 
@@ -51,36 +55,15 @@ telescope.setup {
 telescope.load_extension('lsp_handlers')
 telescope.load_extension('fzy_native')
 
-telescope.setup({
-	extensions = {
-		lsp_handlers = {
-			disable = {},
-			location = {
-				telescope = require('telescope.themes').get_dropdown({}),
-				no_results_message = 'No references found',
-			},
-			symbol = {
-				telescope = {},
-				no_results_message = 'No symbols found',
-			},
-			call_hierarchy = {
-				telescope = require('telescope.themes').get_dropdown({}),
-				no_results_message = 'No calls found',
-            },
-            references = {
-                telescope = require('telescope.themes').get_dropdown({}),
-				no_results_message = 'No calls found',
-            },
-            implementation = {
-				telescope = require('telescope.themes').get_dropdown({}),
-				no_results_message = 'No calls found',
-            },
-		},
-	}
-})
-
-
-
 -- To get ui-select loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
 require("telescope").load_extension("ui-select")
+
+
+require'telescope-lsp-handlers'.setup({
+    reference = {
+        disabled = false,
+        picker = { warp_results = true, prompt_title = 'LSP References' },
+        no_results_message = 'No references found'
+  },
+})

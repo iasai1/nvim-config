@@ -21,7 +21,7 @@ return require('packer').startup(function(use)
 
     use "mbbill/undotree"
 
-    use {'nvim-telescope/telescope-ui-select.nvim' }
+    use { 'nvim-telescope/telescope-ui-select.nvim' }
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -65,9 +65,7 @@ return require('packer').startup(function(use)
 
     use { 'mfussenegger/nvim-jdtls' }
 
-    use { "gbrlsnchs/telescope-lsp-handlers.nvim" }
-
-    use { 'nvim-tree/nvim-web-devicons' }
+    use { "Slotos/telescope-lsp-handlers.nvim" }
 
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
@@ -95,6 +93,23 @@ return require('packer').startup(function(use)
         end
     }
 
+    -- Unless you are still migrating, remove the deprecated commands from v1.x
+    vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 
+    use {
+      "nvim-neo-tree/neo-tree.nvim",
+        branch = "v2.x",
+        requires = { 
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons",
+          "MunifTanjim/nui.nvim",
+        }
+      }
+
+    use 'rstacruz/vim-closer'
+    use 'airblade/vim-gitgutter'
+
+    use 'mfussenegger/nvim-lint'
+    use 'tpope/vim-fugitive'
 end)
 
