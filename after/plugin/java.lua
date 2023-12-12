@@ -1,4 +1,4 @@
-vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>")      
+vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>")
 
 local jdtls = require('jdtls')
 
@@ -29,6 +29,8 @@ config.cmd = {
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
 
+    --lombok
+    '-javaagent:' .. HOME .. '/.local/share/eclipse/lombok.jar',
     -- 💀
     '-jar', jdt_path .. '\\plugins\\org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
@@ -207,7 +209,7 @@ config.init_options = {
 
 local filetypes = { 'java' }
 config.filetypes = filetypes
-config.autostart = true
+--:config.autostart = true
 config.log_level = "debug"
 
 local autocmd
@@ -228,15 +230,35 @@ config.on_init = function(client, results)
         then
             buf_attach()
         end
+
+        config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
+            vim.api.nvim_del_autocmd(autocmd)
+        end)
 end
 
-config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
-    print(autocmd)
-    vim.api.nvim_del_autocmd(autocmd)
-end)
+-- Remote debugger configuration
+require('dap').configurations.java = {
+    {
+        type = "java",
+        request = "attach",
+        name = "Debug (Attach) - Remote",
+        projectName = function()
+            return vim.fn.input("Project Name: ")
+        end,
+--        projectName = "",
+        hostName = "127.0.0.1",
+        port = function()
+            return vim.fn.input("Debug Port: ")
+        end
+    },
+    {
+        type = "java",
+        request = "launch",
+        name = "Debug (Launch)"
+    }
+}
 
 
 -- This starts a new client & server,
 -- or attaches to an existing client & server depending on the `root_dir`.
 jdtls.start_or_attach(config)
-

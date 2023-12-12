@@ -17,12 +17,12 @@ return require('packer').startup(function(use)
     --colorscheme
     use "savq/melange"
 
+    use "folke/tokyonight.nvim"
     use "theprimeagen/harpoon"
 
     use "mbbill/undotree"
-    use "tpope/vim-fugitive"
 
-    use {'nvim-telescope/telescope-ui-select.nvim' }
+    use { 'nvim-telescope/telescope-ui-select.nvim' }
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -61,13 +61,14 @@ return require('packer').startup(function(use)
         end
     }
 
+    use { 'drewtempelmeyer/palenight.vim' }
+    use { 'olimorris/onedarkpro.nvim' }
+
     use { 'mfussenegger/nvim-jdtls' }
 
-    use { "gbrlsnchs/telescope-lsp-handlers.nvim" }
+    use { "Slotos/telescope-lsp-handlers.nvim" }
 
-    use { 'nvim-tree/nvim-web-devicons' }
-
-    use { 'nvim-telescope/telescope-fzy-native.nvim' }
+    use 'nvim-telescope/telescope-fzy-native.nvim'
 
     use {
         "mfussenegger/nvim-dap",
@@ -85,4 +86,56 @@ return require('packer').startup(function(use)
         }
     }
 
+    use {
+        "folke/zen-mode.nvim",
+        config = function()
+            require('zen-mode').setup {
+            }
+        end
+    }
+
+    use {
+        "lewis6991/gitsigns.nvim",
+        config = function()
+            require('gitsigns').setup() 
+        end,
+
+    }
+
+    use {
+        'lewis6991/spellsitter.nvim',
+        config = function()
+            require('spellsitter').setup()
+        end
+    }
+
+    -- Unless you are still migrating, remove the deprecated commands from v1.x
+    vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
+
+    use {
+      "nvim-neo-tree/neo-tree.nvim",
+        branch = "v2.x",
+        requires = { 
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons",
+          "MunifTanjim/nui.nvim",
+        }
+      }
+
+    use 'rstacruz/vim-closer'
+
+    use 'mfussenegger/nvim-lint'
+    use 'tpope/vim-fugitive'
+
+    use {
+      "numToStr/Comment.nvim",
+      config = function() require("Comment").setup() end,
+    }
+
+    use {
+      "nvim-lualine/lualine.nvim",
+      config = function() require "iasai1.statusline" end,
+      requires = { "kyazdani42/nvim-web-devicons", opt = true },
+    }
 end)
+

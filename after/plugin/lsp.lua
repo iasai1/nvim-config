@@ -3,16 +3,12 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
-  --'tsserver',
-  --'eslint',
-  'sumneko_lua',
-  --'rust_analyzer',
-  --'dockerls'
+  'lua_ls',
+  'bashls'
 })
 
-
 -- Fix Undefined global 'vim'
-lsp.configure('sumneko_lua', {
+lsp.configure('lua_ls', {
     settings = {
         Lua = {
             diagnostics = {
@@ -28,7 +24,7 @@ local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
   ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+  ['<CR>'] = cmp.mapping.confirm({ select = true }),
   ["<C-Space>"] = cmp.mapping.complete(),
 })
 
@@ -43,7 +39,7 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     vim.keymap.set("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>")
     vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>")
     vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
-    vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+    vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.rename()<CR>")
     vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
     vim.keymap.set("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>")
     vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
@@ -66,7 +62,9 @@ lsp.set_preferences({
     }
 })
 
+
 lsp.setup()
+require('lspconfig').bashls.setup({})
 
 vim.diagnostic.config({
     virtual_text = true,
