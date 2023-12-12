@@ -16,7 +16,7 @@ local config = {}
 -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
 config.cmd = {
     -- 💀
-    sdk_path .. '/17.0.5-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
+    sdk_path .. '/17.0.8-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
     -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -32,7 +32,7 @@ config.cmd = {
     --lombok
     '-javaagent:' .. HOME .. '/.local/share/eclipse/lombok.jar',
     -- 💀
-    '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+    '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.500.v20230717-2134.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
     -- Must point to the                                                     Change this to
     -- eclipse.jdt.ls installation                                           the actual version
@@ -98,11 +98,15 @@ config.settings = {
             runtimes = {
                 {
                     name = "JavaSE-17",
-                    path = sdk_path .. '/17.0.5-tem/'
+                    path = sdk_path .. '/17.0.8-tem/'
+                },
+                {
+                    name = "JavaSE-11",
+                    path = sdk_path .. '/11.0.20-tem/'
                 },
                 {
                     name = "JavaSE-1.8",
-                    path = sdk_path .. '/8.0.352-tem/'
+                    path = sdk_path .. '/8.0.382-tem/'
                 },
             }
         };

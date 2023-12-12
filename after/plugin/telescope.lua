@@ -52,7 +52,7 @@ telescope.setup {
   }
 }
 
-telescope.load_extension('lsp_handlers')
+--telescope.load_extension('lsp_handlers')
 telescope.load_extension('fzy_native')
 
 -- To get ui-select loaded and working with telescope, you need to call
