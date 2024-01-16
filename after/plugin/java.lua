@@ -6,9 +6,9 @@ local HOME = os.getenv('HOME')
 local jdt_path = HOME .. '/.config/jdt'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
-local workspace_dir = HOME .. '/.config/eclipse/' .. project_name
+local workspace_dir = HOME .. '/.local/eclipse/' .. project_name
 local sdk_path = HOME .. '/.sdkman/candidates/java'
-local DEBUGGER_LOCATION = HOME .. '/.config/nvim-data/java'
+local DEBUGGER_LOCATION = HOME .. '/.local/nvim-data/java'
 
 local config = {}
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
@@ -16,7 +16,7 @@ local config = {}
 -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
 config.cmd = {
     -- 💀
-    sdk_path .. '/17.0.8-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
+    sdk_path .. '/17.0.9-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
     -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
