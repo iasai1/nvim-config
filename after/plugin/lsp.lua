@@ -1,11 +1,7 @@
 local lsp = require("lsp-zero")
 
+require("mason").setup()
 lsp.preset("recommended")
-
-lsp.ensure_installed({
-  'lua_ls',
-  'bashls'
-})
 
 -- Fix Undefined global 'vim'
 lsp.configure('lua_ls', {
@@ -17,7 +13,6 @@ lsp.configure('lua_ls', {
         }
     }
 })
-
 
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
@@ -48,8 +43,12 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>")
     vim.keymap.set("n", "<leader>/", "<cmd>lua vim.lsp.buf.code_action()<CR>")
 
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
+cmp.setup({
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp_mappings
 })
 
 lsp.set_preferences({
@@ -61,7 +60,24 @@ lsp.set_preferences({
         info = 'I'
     }
 })
-
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.setup(),
+    pylsp = function()
+        require('lspconfig').pylsp.setup({
+            pylsp = {
+                pylps = {
+                    plugins = {
+                        flake8 = {
+                            ignore = {'E203'}
+                        }
+                    }
+                }
+            }
+        })
+    end,
+  }
+})
 
 lsp.setup()
 require('lspconfig').bashls.setup({})

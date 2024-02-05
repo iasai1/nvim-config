@@ -3,7 +3,7 @@ vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>"
 local jdtls = require('jdtls')
 
 local HOME = os.getenv('HOME')
-local jdt_path = HOME .. '/.config/jdt'
+local jdt_path = HOME .. '/.local/jdt'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
 local workspace_dir = HOME .. '/.local/eclipse/' .. project_name
@@ -32,11 +32,10 @@ config.cmd = {
     --lombok
     '-javaagent:' .. HOME .. '/.local/share/eclipse/lombok.jar',
     -- 💀
-    '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.500.v20230717-2134.jar',
+    '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.700.v20231214-2017.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
     -- Must point to the                                                     Change this to
     -- eclipse.jdt.ls installation                                           the actual version
-
 
     -- 💀
     '-configuration', jdt_path .. '/config_linux',
@@ -98,15 +97,15 @@ config.settings = {
             runtimes = {
                 {
                     name = "JavaSE-17",
-                    path = sdk_path .. '/17.0.8-tem/'
+                    path = sdk_path .. '/17.0.9-tem/'
                 },
                 {
                     name = "JavaSE-11",
-                    path = sdk_path .. '/11.0.20-tem/'
+                    path = sdk_path .. '/11.0.21-tem/'
                 },
                 {
                     name = "JavaSE-1.8",
-                    path = sdk_path .. '/8.0.382-tem/'
+                    path = sdk_path .. '/8.0.392-tem/'
                 },
             }
         };

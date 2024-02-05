@@ -6,13 +6,20 @@ return require('packer').startup(function(use)
 
     -- Telescope
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.0',
+        'nvim-telescope/telescope.nvim', tag = '0.1.4',
         -- or                            , branch = '0.1.x',
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
 
     -- Treesitter
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+
+    use {
+      "eckon/treesitter-current-functions",
+      requires = { "nvim-treesitter/nvim-treesitter", "nvim-telescope/telescope.nvim" },
+    }
+
+    use { 'slyces/hierarchy.nvim', requires = 'nvim-treesitter/nvim-treesitter' }
 
     --colorscheme
     use "savq/melange"
