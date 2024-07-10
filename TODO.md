@@ -1,0 +1,3 @@
+- ]m navigates to method name instead of opnening bracket
+- status line shows java version
+- status line show target for diff and target/master for 3-way diff

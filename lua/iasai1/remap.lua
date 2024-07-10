@@ -39,4 +39,7 @@ vim.keymap.set("n", "gb", "<C-o>")
 
 vim.keymap.set("n", "]e", "<cmd>lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR,})<CR>")
 
+vim.keymap.set("v", "<leader>y", ":w! /tmp/vitmp<CR>")                                                                   
+vim.keymap.set("n", "<leader>p", ":r! cat /tmp/vitmp<CR>")
+
 vim.keymap.set("n", "[e", "<cmd>lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR,})<CR>")

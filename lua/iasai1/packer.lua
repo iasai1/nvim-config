@@ -85,6 +85,7 @@ return require('packer').startup(function(use)
         requires = {
             'ravenxrz/DAPInstall.nvim',
             "theHamsta/nvim-dap-virtual-text",
+            "nvim-neotest/nvim-nio",
             "rcarriga/nvim-dap-ui",
             "mfussenegger/nvim-dap-python",
             "nvim-telescope/telescope-dap.nvim",
@@ -107,13 +108,6 @@ return require('packer').startup(function(use)
             require('gitsigns').setup() 
         end,
 
-    }
-
-    use {
-        'lewis6991/spellsitter.nvim',
-        config = function()
-            require('spellsitter').setup()
-        end
     }
 
     -- Unless you are still migrating, remove the deprecated commands from v1.x

@@ -177,6 +177,9 @@ config.on_attach = function(client, bufnr)
         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
         augroup END
     ]], false)
+
+    client.resolved_capabilities.document_formatting = false
+    client.resolved_capabilities.document_range_formatting = false
 end
 
 config.capabilities = {
@@ -198,15 +201,13 @@ config.capabilities = {
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 extendedClientCapabilities.classFileContentsSupport = true
+
 local bundles = {
-  vim.fn.glob(
-    DEBUGGER_LOCATION .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
-  ),
+  vim.fn.glob(DEBUGGER_LOCATION .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar", 1),
 }
-vim.list_extend(bundles, vim.split(vim.fn.glob(DEBUGGER_LOCATION .. "/vscode-java-test/server/*.jar"), "\n"))
-config.init_options = {
-    bundles = bundles,
-    extendedClientCapabilities = extendedClientCapabilities
+vim.list_extend(bundles, vim.split(vim.fn.glob(DEBUGGER_LOCATION .. "/vscode-java-test/server/*.jar", 1), "\n"))
+config['init_options'] = {
+  bundles = bundles;
 }
 
 local filetypes = { 'java' }
