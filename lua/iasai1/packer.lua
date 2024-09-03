@@ -95,14 +95,6 @@ return require('packer').startup(function(use)
     }
 
     use {
-        "folke/zen-mode.nvim",
-        config = function()
-            require('zen-mode').setup {
-            }
-        end
-    }
-
-    use {
         "lewis6991/gitsigns.nvim",
         config = function()
             require('gitsigns').setup() 
@@ -112,18 +104,6 @@ return require('packer').startup(function(use)
 
     -- Unless you are still migrating, remove the deprecated commands from v1.x
     vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
-
-    use {
-      "nvim-neo-tree/neo-tree.nvim",
-        branch = "v2.x",
-        requires = { 
-          "nvim-lua/plenary.nvim",
-          "nvim-tree/nvim-web-devicons",
-          "MunifTanjim/nui.nvim",
-        }
-      }
-
-    use 'rstacruz/vim-closer'
 
     use 'mfussenegger/nvim-lint'
     use 'tpope/vim-fugitive'
@@ -138,5 +118,17 @@ return require('packer').startup(function(use)
       config = function() require "iasai1.statusline" end,
       requires = { "kyazdani42/nvim-web-devicons", opt = true },
     }
+    
+    use {
+        dir = IS_DEV and "~/Projects/research/CopilotChat.nvim" or nil,
+        'CopilotC-Nvim/CopilotChat.nvim',
+        branch = "canary",
+        requires = {
+          { 'nvim-telescope/telescope.nvim' },
+          { 'nvim-lua/plenary.nvim' },
+          { 'github/copilot.vim' }
+      },
+      }
 end)
+
 

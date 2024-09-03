@@ -33,3 +33,12 @@ vim.opt.colorcolumn = "80"
 
 
 vim.g.autoformat = false
+
+vim.opt.spelllang = 'en_us'
+vim.opt.spell = true
+vim.cmd [[
+  highlight SpellBad cterm=underline ctermfg=Red gui=undercurl guisp=Red
+  highlight SpellCap cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
+  highlight SpellRare cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
+  highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
+]]
