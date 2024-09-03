@@ -1,7 +1,5 @@
 local lsp = require("lsp-zero")
 
-require("mason").setup()
-lsp.preset("recommended")
 
 -- Fix Undefined global 'vim'
 -- lsp.configure('lua_ls', {
@@ -16,14 +14,14 @@ lsp.preset("recommended")
 
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
+local cmp_mappings = cmp.mapping.preset.insert({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
   ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
   ['<CR>'] = cmp.mapping.confirm({ select = true }),
   ["<C-Space>"] = cmp.mapping.complete(),
 })
 
-
+local lsp_attach = function(client, bufnr)
     -- Mappings.
     vim.keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>")
     vim.keymap.set("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>")
@@ -42,6 +40,13 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 
     vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>")
     vim.keymap.set("n", "<leader>/", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+end
+
+lsp.extend_lspconfig({
+  sign_text = true,
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
 
 cmp.setup({
     window = {
@@ -51,7 +56,8 @@ cmp.setup({
     mapping = cmp_mappings
 })
 
-lsp.set_preferences({
+require("mason").setup()
+lsp.ui({
     suggest_lsp_servers = false,
     sign_icons = {
         error = 'E',
@@ -81,6 +87,8 @@ require('mason-lspconfig').setup({
 
 lsp.setup()
 require('lspconfig').bashls.setup({})
+require('lspconfig').bashls.setup({})
+require('lspconfig').lua_ls.setup({})
 
 vim.diagnostic.config({
     virtual_text = true,

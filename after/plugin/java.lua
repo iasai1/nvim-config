@@ -3,12 +3,12 @@ vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>"
 local jdtls = require('jdtls')
 
 local HOME = os.getenv('HOME')
-local jdt_path = HOME .. '/.local/jdt'
+local jdt_path = HOME .. '/jdt'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
-local workspace_dir = HOME .. '/.local/eclipse/' .. project_name
-local sdk_path = HOME .. '/.sdkman/candidates/java'
-local DEBUGGER_LOCATION = HOME .. '/.local/nvim-data/java'
+local workspace_dir = HOME .. '/eclipse/' .. project_name
+local sdk_path = os.getenv('JAVA_HOME')
+local DEBUGGER_LOCATION = HOME .. '/nvim-data/java'
 
 local config = {}
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
@@ -16,7 +16,7 @@ local config = {}
 -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
 config.cmd = {
     -- 💀
-    sdk_path .. '/17.0.9-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
+    sdk_path .. '/bin/java.exe', -- or '/path/to/java17_or_newer/bin/java'
     -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -30,7 +30,7 @@ config.cmd = {
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
 
     --lombok
-    '-javaagent:' .. HOME .. '/.local/share/eclipse/lombok.jar',
+    '-javaagent:' .. HOME .. 'eclipse/lombok.jar',
     -- 💀
     '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.900.v20240613-2009.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
@@ -38,7 +38,7 @@ config.cmd = {
     -- eclipse.jdt.ls installation                                           the actual version
 
     -- 💀
-    '-configuration', jdt_path .. '/config_linux',
+    '-configuration', jdt_path .. '/config_win',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
     -- Must point to the                      Change to one of `linux`, `win` or `mac`
     -- eclipse.jdt.ls installation            Depending on your system.
@@ -97,15 +97,7 @@ config.settings = {
             runtimes = {
                 {
                     name = "JavaSE-17",
-                    path = sdk_path .. '/17.0.9-tem/'
-                },
-                {
-                    name = "JavaSE-11",
-                    path = sdk_path .. '/11.0.21-tem/'
-                },
-                {
-                    name = "JavaSE-1.8",
-                    path = sdk_path .. '/8.0.392-tem/'
+                    path = sdk_path
                 },
             }
         };
