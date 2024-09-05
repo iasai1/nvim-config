@@ -1,11 +1,4 @@
-vim.cmd [[set packpath+=/home/ms/ishipitc/.local/share/nvim/site]]
-
-local old_os = os.getenv
-os.getenv = function(arg)
-    if arg == 'HOME' then
-        return '/home/ms/ishipitc'
-    end
-    return old_os(arg)
-end
+local HOME = os.getenv('LOCALAPPDATA')
+vim.cmd('set packpath+=' .. HOME .. '/nvim-data/site')
 
 require("iasai1")

@@ -1,4 +1,4 @@
-vim.env.HOME = os.getenv("HOME")
+vim.env.HOME = os.getenv("LOCALAPPDATA")
 
 vim.opt.nu = true
 vim.opt.relativenumber = true

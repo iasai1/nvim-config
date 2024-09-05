@@ -32,7 +32,7 @@ local lsp_attach = function(client, bufnr)
     vim.keymap.set("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>")
     vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>")
     vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
-    vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.rename()<CR>")
+    vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
     vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
     vim.keymap.set("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>")
     vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
@@ -73,8 +73,15 @@ require('mason-lspconfig').setup({
         require('lspconfig').pylsp.setup({
             pylsp = {
                 pylps = {
+                    configurationSources = { "flake8" },
                     plugins = {
+                        pycodestyle = { enabled = false }, -- Disable pycodestyle if you use black or autopep8
+                        black = { enabled = true },
+                        mypy = { enabled = true },
+                        rope_autoimport = { enabled = true },
+                        rope_completion = { enabled = true },
                         flake8 = {
+                            enabled = true,
                             ignore = {'E203'}
                         }
                     }

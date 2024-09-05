@@ -2,7 +2,7 @@ vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>"
 
 local jdtls = require('jdtls')
 
-local HOME = os.getenv('HOME')
+local HOME = os.getenv('LOCALAPPDATA')
 local jdt_path = HOME .. '/jdt'
 local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
 local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
@@ -30,7 +30,7 @@ config.cmd = {
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
 
     --lombok
-    '-javaagent:' .. HOME .. 'eclipse/lombok.jar',
+    '-javaagent:' .. HOME .. '/eclipse/lombok.jar',
     -- 💀
     '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.900.v20240613-2009.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
