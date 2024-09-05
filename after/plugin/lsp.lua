@@ -48,6 +48,7 @@ lsp.extend_lspconfig({
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
 
+---@diagnostic disable-next-line: redundant-parameter
 cmp.setup({
     window = {
       completion = cmp.config.window.bordered(),
@@ -71,19 +72,16 @@ require('mason-lspconfig').setup({
     lsp.setup(),
     pylsp = function()
         require('lspconfig').pylsp.setup({
-            pylsp = {
-                pylps = {
-                    configurationSources = { "flake8" },
+            settings = {
+                pylsp = {
+                    configurationSources = { "pycodestyle" },  -- This should work, but you can also use "flake8" or "mypy" here
                     plugins = {
-                        pycodestyle = { enabled = false }, -- Disable pycodestyle if you use black or autopep8
-                        black = { enabled = true },
-                        mypy = { enabled = true },
-                        rope_autoimport = { enabled = true },
-                        rope_completion = { enabled = true },
-                        flake8 = {
-                            enabled = true,
-                            ignore = {'E203'}
-                        }
+                        pycodestyle = { enabled = true },  -- Enable pycodestyle diagnostics
+                        black = { enabled = true },        -- Enable black for formatting
+                        mypy = { enabled = false },         -- Enable mypy for type-checking
+                        rope_autoimport = { enabled = true },  -- Enable rope for autoimport
+                        rope_completion = { enabled = true },  -- Enable rope for autocompletion
+                        flake8 = { enabled = false, ignore = { "E203" } },  -- Enable flake8 and ignore rule E203
                     }
                 }
             }
@@ -91,11 +89,24 @@ require('mason-lspconfig').setup({
     end,
   }
 })
-
 lsp.setup()
 require('lspconfig').bashls.setup({})
-require('lspconfig').bashls.setup({})
-require('lspconfig').lua_ls.setup({})
+require('lspconfig').lua_ls.setup {
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' },  -- Tell the LSP that 'vim' is a global variable
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),  -- Make the server aware of Neovim runtime files
+        checkThirdParty = false,  -- Avoid prompts to check for third-party libraries
+      },
+      telemetry = {
+        enable = false,  -- Disable telemetry to prevent reporting usage data
+      },
+    },
+  },
+}
 
 vim.diagnostic.config({
     virtual_text = true,
