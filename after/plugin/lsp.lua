@@ -54,7 +54,17 @@ cmp.setup({
       completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
     },
-    mapping = cmp_mappings
+    mapping = cmp_mappings,
+    sources = {
+        { name = 'nvim_lsp' }, -- Enable LSP-based autocompletion
+        { name = 'buffer' },   -- Enable buffer-based completion
+        { name = 'path' },     -- Enable filesystem path completion
+    },
+    snippet = {
+        expand = function(args)
+          vim.snippet.expand(args.body)
+        end,
+    },
 })
 
 require("mason").setup()
@@ -67,21 +77,24 @@ lsp.ui({
         info = 'I'
     }
 })
+
 require('mason-lspconfig').setup({
   handlers = {
     lsp.setup(),
     pylsp = function()
         require('lspconfig').pylsp.setup({
+            flags = {
+                debounce_text_changes = 150,  -- Lower debounce time to refresh diagnostics faster
+            },
             settings = {
-                pylsp = {
-                    configurationSources = { "pycodestyle" },  -- This should work, but you can also use "flake8" or "mypy" here
+                pylps = {
                     plugins = {
-                        pycodestyle = { enabled = true },  -- Enable pycodestyle diagnostics
-                        black = { enabled = true },        -- Enable black for formatting
-                        mypy = { enabled = false },         -- Enable mypy for type-checking
-                        rope_autoimport = { enabled = true },  -- Enable rope for autoimport
-                        rope_completion = { enabled = true },  -- Enable rope for autocompletion
-                        flake8 = { enabled = false, ignore = { "E203" } },  -- Enable flake8 and ignore rule E203
+                        flake8 = { enabled = false },         -- Disable Flake8 linting
+                        pycodestyle = { enabled = false },    -- Disable Pycodestyle linting
+                        pylint = { enabled = false },         -- Disable Pylint linting
+                        black = { enabled = false },          -- Disable Black formatting
+                        autopep8 = { enabled = false },       -- Disable autopep8 formatting
+                        mypy = { enabled = false },           -- Disable Mypy type checking 
                     }
                 }
             }
@@ -89,6 +102,7 @@ require('mason-lspconfig').setup({
     end,
   }
 })
+
 lsp.setup()
 require('lspconfig').bashls.setup({})
 require('lspconfig').lua_ls.setup {
@@ -110,4 +124,8 @@ require('lspconfig').lua_ls.setup {
 
 vim.diagnostic.config({
     virtual_text = true,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true,
 })
