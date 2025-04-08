@@ -176,23 +176,13 @@ _G.packer_plugins = {
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/melange",
     url = "https://github.com/savq/melange"
   },
-  ["neo-tree.nvim"] = {
-    loaded = true,
-    path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/neo-tree.nvim",
-    url = "https://github.com/nvim-neo-tree/neo-tree.nvim"
-  },
-  ["nui.nvim"] = {
-    loaded = true,
-    path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/nui.nvim",
-    url = "https://github.com/MunifTanjim/nui.nvim"
-  },
   ["nvim-cmp"] = {
     loaded = true,
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
   },
   ["nvim-dap"] = {
-    after = { "DAPInstall.nvim", "nvim-dap-ui", "nvim-dap-python", "nvim-dap-virtual-text", "one-small-step-for-vimkind", "telescope-dap.nvim", "nvim-nio" },
+    after = { "telescope-dap.nvim", "DAPInstall.nvim", "nvim-dap-python", "nvim-dap-virtual-text", "nvim-nio", "one-small-step-for-vimkind", "nvim-dap-ui" },
     loaded = false,
     needs_bufread = false,
     only_cond = false,
@@ -250,6 +240,12 @@ _G.packer_plugins = {
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/opt/nvim-nio",
     url = "https://github.com/nvim-neotest/nvim-nio"
   },
+  ["nvim-tree.lua"] = {
+    config = { "\27LJ\2\nƒ\3\0\0\6\0\20\0\0236\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\b\0005\3\3\0005\4\5\0005\5\4\0=\5\6\4=\4\a\3=\3\t\0025\3\v\0005\4\n\0=\4\f\3=\3\r\0025\3\14\0=\3\15\0025\3\16\0=\3\17\0025\3\18\0=\3\19\2B\0\2\1K\0\1\0\ffilters\1\0\1\rdotfiles\1\24update_focused_file\1\0\2\venable\2\15update_cwd\2\tview\1\0\3\nwidth\3( preserve_window_proportions\1\tside\tleft\factions\14open_file\1\0\0\1\0\2\18resize_window\2\17quit_on_open\1\rrenderer\1\0\1\17hijack_netrw\2\nicons\tshow\1\0\0\1\0\4\vfolder\2\tfile\2\bgit\2\17folder_arrow\2\1\0\1\16group_empty\2\nsetup\14nvim-tree\frequire\0" },
+    loaded = true,
+    path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
+    url = "https://github.com/nvim-tree/nvim-tree.lua"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
@@ -289,6 +285,12 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
+  },
+  ["resty.nvim"] = {
+    config = { "\27LJ\2\n[\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\2\18result_format\tjson\17result_split\2\nsetup\nresty\frequire\0" },
+    loaded = true,
+    path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/resty.nvim",
+    url = "https://github.com/lima1909/resty.nvim"
   },
   ["telescope-dap.nvim"] = {
     load_after = {
@@ -334,11 +336,6 @@ _G.packer_plugins = {
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/undotree",
     url = "https://github.com/mbbill/undotree"
   },
-  ["vim-closer"] = {
-    loaded = true,
-    path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/vim-closer",
-    url = "https://github.com/rstacruz/vim-closer"
-  },
   ["vim-fugitive"] = {
     loaded = true,
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/vim-fugitive",
@@ -349,12 +346,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/which-key.nvim",
     url = "https://github.com/folke/which-key.nvim"
-  },
-  ["zen-mode.nvim"] = {
-    config = { "\27LJ\2\n:\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\rzen-mode\frequire\0" },
-    loaded = true,
-    path = "/home/ms/ishipitc/.local/share/nvim/site/pack/packer/start/zen-mode.nvim",
-    url = "https://github.com/folke/zen-mode.nvim"
   }
 }
 
@@ -400,14 +391,18 @@ time([[Config for which-key.nvim]], false)
 time([[Config for lualine.nvim]], true)
 try_loadstring("\27LJ\2\n1\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\1K\0\1\0\22iasai1.statusline\frequire\0", "config", "lualine.nvim")
 time([[Config for lualine.nvim]], false)
+-- Config for: resty.nvim
+time([[Config for resty.nvim]], true)
+try_loadstring("\27LJ\2\n[\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\2\18result_format\tjson\17result_split\2\nsetup\nresty\frequire\0", "config", "resty.nvim")
+time([[Config for resty.nvim]], false)
+-- Config for: nvim-tree.lua
+time([[Config for nvim-tree.lua]], true)
+try_loadstring("\27LJ\2\nƒ\3\0\0\6\0\20\0\0236\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\b\0005\3\3\0005\4\5\0005\5\4\0=\5\6\4=\4\a\3=\3\t\0025\3\v\0005\4\n\0=\4\f\3=\3\r\0025\3\14\0=\3\15\0025\3\16\0=\3\17\0025\3\18\0=\3\19\2B\0\2\1K\0\1\0\ffilters\1\0\1\rdotfiles\1\24update_focused_file\1\0\2\venable\2\15update_cwd\2\tview\1\0\3\nwidth\3( preserve_window_proportions\1\tside\tleft\factions\14open_file\1\0\0\1\0\2\18resize_window\2\17quit_on_open\1\rrenderer\1\0\1\17hijack_netrw\2\nicons\tshow\1\0\0\1\0\4\vfolder\2\tfile\2\bgit\2\17folder_arrow\2\1\0\1\16group_empty\2\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
+time([[Config for nvim-tree.lua]], false)
 -- Config for: gitsigns.nvim
 time([[Config for gitsigns.nvim]], true)
 try_loadstring("\27LJ\2\n6\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\rgitsigns\frequire\0", "config", "gitsigns.nvim")
 time([[Config for gitsigns.nvim]], false)
--- Config for: zen-mode.nvim
-time([[Config for zen-mode.nvim]], true)
-try_loadstring("\27LJ\2\n:\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\rzen-mode\frequire\0", "config", "zen-mode.nvim")
-time([[Config for zen-mode.nvim]], false)
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Event lazy-loads

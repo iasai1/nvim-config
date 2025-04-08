@@ -81,6 +81,7 @@ require('mason-lspconfig').setup({
 
 lsp.setup()
 require('lspconfig').bashls.setup({})
+require('lspconfig').clangd.setup({})
 
 vim.diagnostic.config({
     virtual_text = true,

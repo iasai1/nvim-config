@@ -6,7 +6,7 @@ vim.opt.relativenumber = true
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.opt.expandtab = false
 
 vim.opt.smartindent = true
 
@@ -42,3 +42,6 @@ vim.cmd [[
   highlight SpellRare cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
   highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
 ]]
+
+vim.opt.list = true
+vim.opt.listchars = { tab = "»·", trail = "·", eol = "¶" }

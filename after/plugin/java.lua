@@ -1,5 +1,6 @@
-vim.keymap.set("n", "<leader>aj", "<cmd>lua vim.lsp.buf_attach_client(0, 1)<CR>")
-
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "java",
+  callback = function()
 local jdtls = require('jdtls')
 
 local HOME = os.getenv('HOME')
@@ -16,7 +17,7 @@ local config = {}
 -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
 config.cmd = {
     -- 💀
-    sdk_path .. '/17.0.9-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
+    sdk_path .. '/21.0.6-tem/bin/java', -- or '/path/to/java17_or_newer/bin/java'
     -- depends on if `java` is in your $PATH env variable and if it points to the right version.
 
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -32,7 +33,7 @@ config.cmd = {
     --lombok
     '-javaagent:' .. HOME .. '/.local/share/eclipse/lombok.jar',
     -- 💀
-    '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.6.900.v20240613-2009.jar',
+    '-jar', jdt_path .. '/plugins/org.eclipse.equinox.launcher_1.7.0.v20250331-1702.jar',
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
     -- Must point to the                                                     Change this to
     -- eclipse.jdt.ls installation                                           the actual version
@@ -96,6 +97,10 @@ config.settings = {
         configuration = {
             runtimes = {
                 {
+                    name = "JavaSE-21",
+                    path = sdk_path .. '/21.0.6-tem/'
+                },
+                {
                     name = "JavaSE-17",
                     path = sdk_path .. '/17.0.9-tem/'
                 },
@@ -139,23 +144,6 @@ config.on_attach = function(client, bufnr)
 
     vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>")
     vim.keymap.set("n", "<C-/>", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-   -- vim.keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>")
-   -- vim.keymap.set("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>")
-   -- vim.keymap.set("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>")
-   -- vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-   -- vim.keymap.set("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-   -- vim.keymap.set("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>")
-   -- vim.keymap.set("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>")
-   -- vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>")
-   -- vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
-   -- vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-   -- vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-   -- vim.keymap.set("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>")
-   -- vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
-   -- vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
-
-   -- vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>")
-   -- vim.keymap.set("n", "<C-/>", "<cmd>lua vim.lsp.buf.code_action()<CR>")
     -- Java specific
     vim.keymap.set("n", "<leader>ji", "<Cmd>lua require('jdtls').organize_imports()<CR>")
     vim.keymap.set("n", "<leader>jt", "<Cmd>lua require('jdtls').test_class()<CR>")
@@ -202,12 +190,26 @@ local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 extendedClientCapabilities.classFileContentsSupport = true
 
-local bundles = {
-  vim.fn.glob(DEBUGGER_LOCATION .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar", 1),
-}
-vim.list_extend(bundles, vim.split(vim.fn.glob(DEBUGGER_LOCATION .. "/vscode-java-test/server/*.jar", 1), "\n"))
-config['init_options'] = {
-  bundles = bundles;
+local bundles = {}
+
+-- Add Java debug plugin if it exists
+local debug_jar = DEBUGGER_LOCATION .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.53.1.jar"
+if vim.fn.filereadable(debug_jar) == 1 then
+  table.insert(bundles, debug_jar)
+end
+
+-- Add all test jars from vscode-java-test
+local test_jars = vim.fn.glob(DEBUGGER_LOCATION .. "/vscode-java-test/server/*.jar", 0, 1)
+for _, jar in ipairs(test_jars) do
+  if vim.fn.filereadable(jar) == 1 then
+    table.insert(bundles, jar)
+  end
+end
+
+-- Attach to your existing JDTLS config
+config.init_options = {
+  bundles = bundles,
+  extendedClientCapabilities = extendedClientCapabilities
 }
 
 local filetypes = { 'java' }
@@ -215,29 +217,29 @@ config.filetypes = filetypes
 --:config.autostart = true
 config.log_level = "debug"
 
-local autocmd
-config.on_init = function(client, results)
-
-    local buf_attach = function()
-        vim.lsp.buf_attach_client(0, client.id)
-    end
-
-    autocmd = vim.api.nvim_create_autocmd('FileType', {
-        desc = string.format('Attach LSP: %s', client.name),
-        pattern = filetypes,
-        callback = buf_attach
-    })
-
-    if vim.v.vim_did_enter == 1 and
-        vim.tbl_contains(filetypes, vim.bo.filetype)
-        then
-            buf_attach()
-        end
-
-        config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
-            vim.api.nvim_del_autocmd(autocmd)
-        end)
-end
+-- local autocmd
+-- config.on_init = function(client, results)
+--
+--     local buf_attach = function()
+--         vim.lsp.buf_attach_client(0, client.id)
+--     end
+--
+--     autocmd = vim.api.nvim_create_autocmd('FileType', {
+--         desc = string.format('Attach LSP: %s', client.name),
+--         pattern = filetypes,
+--         callback = buf_attach
+--     })
+--
+--     if vim.v.vim_did_enter == 1 and
+--         vim.tbl_contains(filetypes, vim.bo.filetype)
+--         then
+--             buf_attach()
+--         end
+--
+--         config.on_exit = vim.schedule_wrap(function(code, signal, client_id)
+--             vim.api.nvim_del_autocmd(autocmd)
+--         end)
+-- end
 
 -- Remote debugger configuration
 require('dap').configurations.java = {
@@ -265,3 +267,5 @@ require('dap').configurations.java = {
 -- This starts a new client & server,
 -- or attaches to an existing client & server depending on the `root_dir`.
 jdtls.start_or_attach(config)
+end,
+})

@@ -77,6 +77,16 @@ return require('packer').startup(function(use)
 
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
+	use {
+	  "nvim-tree/nvim-web-devicons",
+	  opts = {
+		color_icons = true, -- Enable different highlight colors per icon
+		default = true, -- Enable default icons globally
+		strict = true, -- Ensure strict selection of icons
+		variant = "dark", -- Set manually (can be "light" or "dark")
+	  }
+	}
+
     use {
         "mfussenegger/nvim-dap",
         opt = true,
@@ -116,7 +126,7 @@ return require('packer').startup(function(use)
     use {
       "nvim-lualine/lualine.nvim",
       config = function() require "iasai1.statusline" end,
-      requires = { "kyazdani42/nvim-web-devicons", opt = true },
+      requires = { "nvim-tree/nvim-web-devicons", opt = true },
     }
     
     use {
@@ -127,8 +137,64 @@ return require('packer').startup(function(use)
           { 'nvim-telescope/telescope.nvim' },
           { 'nvim-lua/plenary.nvim' },
           { 'github/copilot.vim' }
-      },
-      }
+		},
+    }
+
+	use {
+	  "lima1909/resty.nvim",
+	  requires = {
+		"nvim-lua/plenary.nvim",
+		"nvim-telescope/telescope.nvim"
+	  },
+	  config = function()
+		require("resty").setup({
+		  result_split = true, -- Show results in a split window
+		  result_format = "json", -- Format response output
+--		  favorite_dir = vim.fn.stdpath("config") .. "/resty_requests", -- Scratch file storage
+		})
+
+	  end
+  }	
+		-- nvim-tree with devicons
+	  use {
+		'nvim-tree/nvim-tree.lua',
+		requires = {
+		  'nvim-tree/nvim-web-devicons', -- optional, for file icons
+		},
+		config = function()
+		  require('nvim-tree').setup {
+			renderer = {
+			  group_empty = true, -- Compact empty folders
+			  icons = {
+				show = {
+				  file = true,
+				  folder = true,
+				  folder_arrow = true,
+				  git = true,
+				},
+			  },
+			},
+			actions = {
+			  open_file = {
+				quit_on_open = false,
+				resize_window = true,
+			  },
+			},
+			view = {
+			  width = 40,
+			  side = 'left',
+			  preserve_window_proportions = false,
+			},
+			hijack_netrw = true,
+			update_focused_file = {
+			  enable = true,
+			  update_cwd = true,
+			},
+			filters = {
+			  dotfiles = false,
+--			  custom = { '.git', 'node_modules', '.cache' },
+			},
+		  }
+		end
+	  }
 end)
-
-

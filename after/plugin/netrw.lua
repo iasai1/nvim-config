@@ -1,8 +1,8 @@
 -- Open Netrw on the directory of the current file
-vim.api.nvim_set_keymap('n', '<leader>pv', ':Lexplore %:p:h<CR>', { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', '<leader>pv', ':Lexplore %:p:h<CR>', { noremap = true, silent = true })
 
 -- Toggle the Netrw window
-vim.api.nvim_set_keymap('n', '<leader>pa', ':Lexplore<CR>', { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', '<leader>pa', ':Lexplore<CR>', { noremap = true, silent = true })
 
 -- Set Netrw window size based on screen width
 if vim.o.columns < 90 then
